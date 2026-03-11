@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="internship-detail-container">
+	<h2>{{ internship.title }}</h2>
+	<div class="internship-meta">
+		<span><strong>Company:</strong> {{ internship.company.company_name }}</span><br>
+		<span><strong>Location:</strong> {{ internship.location }}</span><br>
+		<span><strong>Posted:</strong> {{ internship.posted_at|date:'M d, Y' }}</span>
+	</div>
+	<div class="internship-description">
+		<p>{{ internship.description }}</p>
+	</div>
+	{% if internship.document %}
+	<div class="internship-document">
+		<a href="{{ internship.document.url }}" target="_blank">Download Attachment</a>
+	</div>
+	{% endif %}
+	<a href="/applications/apply/{{ internship.id }}/" class="btn-primary">Apply Now</a>
+</div>
+<style>
+.internship-detail-container {
+	max-width: 600px;
+	margin: 2em auto;
+	background: #fff;
+	padding: 2em 2.5em;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.internship-detail-container h2 {
+	margin-bottom: 1em;
+}
+.internship-meta {
+	color: #555;
+	margin-bottom: 1.5em;
+}
+.internship-description {
+	margin-bottom: 1.5em;
+}
+.internship-document {
+	margin-bottom: 1.5em;
+}
+.btn-primary {
+	background: #007bff;
+	color: #fff;
+	border: none;
+	padding: 0.8em 2em;
+	border-radius: 5px;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background 0.2s;
+	text-decoration: none;
+	display: inline-block;
+}
+.btn-primary:hover {
+	background: #0056b3;
+}
+</style>
+{% endblock %}

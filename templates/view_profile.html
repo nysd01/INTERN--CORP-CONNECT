@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profile-container">
+	<div class="profile-header">
+		{% if profile.photo %}
+			<img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-avatar" />
+		{% else %}
+			<img src="/static/img/default-avatar.png" alt="Profile Photo" class="profile-avatar" />
+		{% endif %}
+		<h2>{{ profile.user.username }}'s Profile</h2>
+		<p class="profile-type">{% if profile.user.is_company %}Company{% else %}Intern{% endif %}</p>
+	</div>
+	<div class="profile-details">
+		<p><strong>Email:</strong> {{ profile.user.email }}</p>
+		<p><strong>Address:</strong> {{ profile.address }}</p>
+		{% if profile.user.is_company %}
+			<p><strong>Company Name:</strong> {{ profile.name }}</p>
+			<p><strong>Description:</strong> {{ profile.description }}</p>
+			{% if profile.website %}<p><strong>Website:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>{% endif %}
+		{% else %}
+			<p><strong>Domain:</strong> {{ profile.domain }}</p>
+			{% if profile.resume %}<p><strong>Resume:</strong> <a href="{{ profile.resume.url }}" target="_blank">Download</a></p>{% endif %}
+			{% if profile.bio %}<p><strong>Bio:</strong> {{ profile.bio }}</p>{% endif %}
+		{% endif %}
+	</div>
+	<a href="/accounts/edit_profile/" class="btn-primary">Edit Profile</a>
+</div>
+<style>
+.profile-container {
+	max-width: 500px;
+	margin: 2em auto;
+	background: #fff;
+	padding: 2em 2.5em;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+	text-align: center;
+}
+.profile-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 1.5em;
+}
+.profile-avatar {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #eee;
+	margin-bottom: 0.7em;
+}
+.profile-type {
+	font-size: 1.1em;
+	color: #007bff;
+	margin-bottom: 0.5em;
+}
+.profile-details {
+	text-align: left;
+	margin-bottom: 1.5em;
+}
+.btn-primary {
+	background: #007bff;
+	color: #fff;
+	border: none;
+	padding: 0.8em 2em;
+	border-radius: 5px;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background 0.2s;
+	text-decoration: none;
+	display: inline-block;
+}
+.btn-primary:hover {
+	background: #0056b3;
+}
+</style>
+<style>
+.profile-container {
+	max-width: 500px;
+	margin: 2em auto;
+	background: #fff;
+	padding: 2em 2.5em;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+	text-align: center;
+}
+.profile-details {
+	text-align: left;
+	margin-bottom: 1.5em;
+}
+.btn-primary {
+	background: #007bff;
+	color: #fff;
+	border: none;
+	padding: 0.8em 2em;
+	border-radius: 5px;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background 0.2s;
+	text-decoration: none;
+	display: inline-block;
+}
+.btn-primary:hover {
+	background: #0056b3;
+}
+</style>
+{% endblock %}

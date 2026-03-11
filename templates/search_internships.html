@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="search-container">
+    <h2>Search Internships</h2>
+    <form method="get" class="styled-form">
+        <input type="text" name="q" placeholder="Search by title, company, or skill" class="input-field" value="{{ request.GET.q }}" />
+        <button type="submit" class="btn-primary">Search</button>
+    </form>
+    <div class="search-results">
+        {% if internships %}
+            <ul>
+                {% for internship in internships %}
+                <li>
+                    <a href="/internships/{{ internship.id }}/">{{ internship.title }}</a> at <strong>{{ internship.company.company_name }}</strong>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No internships found.</p>
+        {% endif %}
+    </div>
+</div>
+<style>
+.search-container {
+    max-width: 600px;
+    margin: 2em auto;
+    background: #fff;
+    padding: 2em 2.5em;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.search-container h2 {
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+.styled-form .input-field {
+    width: 100%;
+    padding: 0.8em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.8em 2em;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-primary:hover {
+    background: #0056b3;
+}
+.search-results ul {
+    list-style: none;
+    padding: 0;
+}
+.search-results li {
+    margin-bottom: 1em;
+    background: #f5f5f5;
+    padding: 1em;
+    border-radius: 6px;
+}
+.search-results a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.search-results a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}

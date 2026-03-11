@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="list-container">
+	<h2>Available Internships</h2>
+	<ul class="internship-list">
+		{% for internship in internships %}
+		<li class="internship-item">
+			<a href="/internships/{{ internship.id }}/">{{ internship.title }}</a> at <strong>{{ internship.company.company_name }}</strong>
+			<span class="location">{{ internship.location }}</span>
+		</li>
+		{% empty %}
+		<li>No internships available.</li>
+		{% endfor %}
+	</ul>
+</div>
+<style>
+.list-container {
+	max-width: 700px;
+	margin: 2em auto;
+	background: #fff;
+	padding: 2em 2.5em;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.internship-list {
+	list-style: none;
+	padding: 0;
+}
+.internship-item {
+	padding: 1em;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.internship-item a {
+	color: #007bff;
+	text-decoration: none;
+	font-weight: bold;
+}
+.internship-item a:hover {
+	text-decoration: underline;
+}
+.location {
+	color: #888;
+	font-size: 0.95em;
+}
+</style>
+{% endblock %}

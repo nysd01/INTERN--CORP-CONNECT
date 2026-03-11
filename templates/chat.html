@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="chat-container">
+    <h2>Chat with {{ other_user.username }}</h2>
+    <div id="chat-box" class="chat-box">
+        {% for message in messages %}
+            <div class="chat-message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                <span class="sender">{{ message.sender.username }}</span>:
+                <span class="content">{{ message.content }}</span>
+                <span class="timestamp">{{ message.timestamp|date:'M d, Y H:i' }}</span>
+            </div>
+        {% empty %}
+            <div class="no-messages">No messages yet.</div>
+        {% endfor %}
+    </div>
+    <form id="chat-form" class="chat-form" autocomplete="off">
+        <textarea id="chat-message-input" rows="2" placeholder="Type your message..."></textarea>
+        <button type="submit" class="btn-primary">Send</button>
+    </form>
+</div>
+<style>
+.chat-container { max-width: 600px; margin: 2em auto; background: #fff; padding: 2em; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.chat-box { min-height: 300px; max-height: 400px; overflow-y: auto; margin-bottom: 1.5em; background: #f9f9f9; border-radius: 8px; padding: 1em; display: flex; flex-direction: column; }
+.chat-message { margin-bottom: 1em; padding: 0.7em 1em; border-radius: 8px; max-width: 70%; word-break: break-word; }
+.chat-message.sent { align-self: flex-end; background: #e6f0ff; color: #007bff; text-align: right; }
+.chat-message.received { align-self: flex-start; background: #f1f1f1; color: #222; text-align: left; }
+.sender { font-weight: bold; }
+.timestamp { font-size: 0.85em; color: #888; margin-left: 0.5em; }
+.chat-form { display: flex; gap: 0.5em; }
+#chat-message-input { flex: 1; resize: none; border-radius: 6px; border: 1px solid #ccc; padding: 0.7em; font-size: 1em; }
+.btn-primary { background: #007bff; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 4px; cursor: pointer; }
+.btn-primary:hover { background: #0056b3; }
+</style>
+<script>
+const userId = {{ user.id }};
+const otherUserId = {{ other_user.id }};
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-message-input');
+const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+const chatSocket = new WebSocket(
+    wsScheme + '://' + window.location.host + '/ws/chat/' + otherUserId + '/'
+);
+
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message ' + (data.sender_id === userId ? 'sent' : 'received');
+    msgDiv.innerHTML = `<span class="sender">${data.sender_username}</span>: <span class="content">${data.message}</span>`;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+};
+
+chatForm.onsubmit = function(e) {
+    e.preventDefault();
+    const message = chatInput.value.trim();
+    if (message) {
+        chatSocket.send(JSON.stringify({ 'message': message }));
+        chatInput.value = '';
+    }
+};
+
+// Scroll to bottom on load
+chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="status-container">
+	<h2>Application Status</h2>
+	<table class="status-table">
+		<thead>
+			<tr>
+				<th>Internship</th>
+				<th>Status</th>
+				<th>Date Applied</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for application in applications %}
+			<tr>
+				<td><a href="/internships/{{ application.internship.id }}/">{{ application.internship.title }}</a></td>
+				<td>
+					{% if request.user.is_company %}
+					<form method="post" action="/applications/update_status/{{ application.id }}/" style="display:inline;">
+						{% csrf_token %}
+						<select name="status" onchange="toggleResubmissionFields(this, '{{ application.id }}')">
+							<option value="pending" {% if application.status == 'pending' %}selected{% endif %}>Pending</option>
+							<option value="accepted" {% if application.status == 'accepted' %}selected{% endif %}>Accepted</option>
+							<option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Rejected</option>
+							<option value="resubmission" {% if application.status == 'resubmission' %}selected{% endif %}>Resubmission Requested</option>
+						</select>
+						<span id="resubmission-fields-{{ application.id }}" style="display:none;">
+							<input type="text" name="missing_docs" placeholder="Missing documents (comma separated)" style="width:180px;" />
+						</span>
+						<button type="submit">Update</button>
+					</form>
+					<script>
+					function toggleResubmissionFields(select, appId) {
+						var field = document.getElementById('resubmission-fields-' + appId);
+						if (select.value === 'resubmission') {
+							field.style.display = 'inline';
+						} else {
+							field.style.display = 'none';
+						}
+					}
+					</script>
+					{% else %}
+					{{ application.status|title }}
+					{% if application.status == 'resubmission' %}
+						<form method="post" action="/applications/resubmit/{{ application.id }}/" enctype="multipart/form-data" style="margin-top:8px;">
+							{% csrf_token %}
+							<input type="file" name="resubmitted_document" required />
+							<button type="submit">Resubmit</button>
+						</form>
+					{% endif %}
+					{% endif %}
+				</td>
+				<td>{{ application.date_applied|date:'M d, Y' }}</td>
+			</tr>
+			{% empty %}
+			<tr><td colspan="3">No applications found.</td></tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<style>
+.status-container {
+	max-width: 700px;
+	margin: 2em auto;
+	background: #fff;
+	padding: 2em 2.5em;
+	border-radius: 10px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.status-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1.5em;
+}
+.status-table th, .status-table td {
+	border: 1px solid #eee;
+	padding: 0.8em;
+	text-align: left;
+}
+.status-table th {
+	background: #f5f5f5;
+}
+.status-table tr:nth-child(even) {
+	background: #f9f9f9;
+}
+.status-table a {
+	color: #007bff;
+	text-decoration: none;
+}
+.status-table a:hover {
+	text-decoration: underline;
+}
+</style>
+{% endblock %}
