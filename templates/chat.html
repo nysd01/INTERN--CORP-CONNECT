@@ -1,67 +1,220 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="chat-container">
-    <h2>Chat with {{ other_user.username }}</h2>
-    <div id="chat-box" class="chat-box">
-        {% for message in messages %}
-            <div class="chat-message {% if message.sender == user %}sent{% else %}received{% endif %}">
-                <span class="sender">{{ message.sender.username }}</span>:
-                <span class="content">{{ message.content }}</span>
-                <span class="timestamp">{{ message.timestamp|date:'M d, Y H:i' }}</span>
-            </div>
-        {% empty %}
-            <div class="no-messages">No messages yet.</div>
-        {% endfor %}
+<div class="chat-outer-bg">
+    <div class="chat-card">
+        <div class="chat-header">
+            <h2>Chat with {{ other_user.username }}</h2>
+            {% if user.is_company and other_user.is_intern %}
+                <a href="/company/applications/?applicant={{ other_user.id }}" class="btn-primary chat-app-link">View Applicant's Applications</a>
+            {% endif %}
+        </div>
+        <div id="chat-box" class="chat-box-modern">
+            {% for message in messages %}
+                <div class="chat-bubble {% if message.sender == user %}sent{% else %}received{% endif %}"> 
+                    <div class="chat-bubble-avatar"> 
+                        {% if message.sender.is_company and message.sender.companyprofile.photo %} 
+                            <img src="{{ message.sender.companyprofile.photo.url }}" alt="Profile Photo" class="avatar"> 
+                        {% elif message.sender.is_intern and message.sender.internprofile.photo %} 
+                            <img src="{{ message.sender.internprofile.photo.url }}" alt="Profile Photo" class="avatar"> 
+                        {% else %} 
+                            <img src="{% static 'img/default_avatar.png' %}" alt="Profile Photo" class="avatar"> 
+                        {% endif %} 
+                    </div> 
+                    <div class="chat-bubble-content"> 
+                        <span class="sender">{{ message.sender.username }}</span> 
+                        <span class="content">{{ message.content }}</span> 
+                        <span class="timestamp">{{ message.timestamp|date:'M d, Y H:i' }}</span> 
+                    </div> 
+                </div>
+            {% empty %}
+                <div class="no-messages">No messages yet.</div>
+            {% endfor %}
+        </div>
+        <form id="chat-form" class="chat-form-modern" autocomplete="off">
+            <textarea id="chat-message-input" rows="2" placeholder="Type your message..."></textarea>
+            <button type="submit" class="btn-primary">Send</button>
+        </form>
     </div>
-    <form id="chat-form" class="chat-form" autocomplete="off">
-        <textarea id="chat-message-input" rows="2" placeholder="Type your message..."></textarea>
-        <button type="submit" class="btn-primary">Send</button>
-    </form>
 </div>
 <style>
-.chat-container { max-width: 600px; margin: 2em auto; background: #fff; padding: 2em; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-.chat-box { min-height: 300px; max-height: 400px; overflow-y: auto; margin-bottom: 1.5em; background: #f9f9f9; border-radius: 8px; padding: 1em; display: flex; flex-direction: column; }
-.chat-message { margin-bottom: 1em; padding: 0.7em 1em; border-radius: 8px; max-width: 70%; word-break: break-word; }
-.chat-message.sent { align-self: flex-end; background: #e6f0ff; color: #007bff; text-align: right; }
-.chat-message.received { align-self: flex-start; background: #f1f1f1; color: #222; text-align: left; }
-.sender { font-weight: bold; }
-.timestamp { font-size: 0.85em; color: #888; margin-left: 0.5em; }
-.chat-form { display: flex; gap: 0.5em; }
-#chat-message-input { flex: 1; resize: none; border-radius: 6px; border: 1px solid #ccc; padding: 0.7em; font-size: 1em; }
-.btn-primary { background: #007bff; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 4px; cursor: pointer; }
-.btn-primary:hover { background: #0056b3; }
+.chat-outer-bg {
+    background: #f4f8ff;
+    min-height: 90vh;
+    padding: 2em 0;
+}
+.chat-card {
+    background: #fff;
+    max-width: 540px;
+    margin: 2em auto;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(123,47,242,0.10);
+    padding: 2em 2em 1.5em 2em;
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh;
+}
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2em;
+}
+.chat-app-link { margin-left: 1em; font-size: 0.95em; }
+.chat-box-modern {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    background: #f7fafd;
+    border-radius: 10px;
+    min-height: 300px;
+    max-height: 50vh;
+}
+.chat-bubble {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 1.1em;
+}
+.chat-bubble.sent {
+    flex-direction: row-reverse;
+}
+.chat-bubble-avatar {
+    flex-shrink: 0;
+    margin: 0 0.7em;
+}
+.chat-bubble-content {
+    background: #e9e9f7;
+    border-radius: 14px;
+    padding: 0.7em 1.2em;
+    min-width: 80px;
+    max-width: 340px;
+    word-break: break-word;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.chat-bubble.sent .chat-bubble-content {
+    background: #d1e7ff;
+    align-items: flex-end;
+}
+.chat-bubble .sender {
+    font-weight: 600;
+    color: #7b2ff2;
+    margin-bottom: 0.2em;
+    display: block;
+}
+.chat-bubble .content {
+    color: #222;
+    margin-bottom: 0.2em;
+    display: block;
+}
+.chat-bubble .timestamp {
+    color: #888;
+    font-size: 0.85em;
+    margin-top: 0.1em;
+    align-self: flex-end;
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+.chat-form-modern {
+    display: flex;
+    gap: 1em;
+    margin-top: 1em;
+}
+.chat-form-modern textarea {
+    flex: 1;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.7em;
+    font-size: 1em;
+    resize: none;
+    min-height: 44px;
+    background: #f7fafd;
+}
+.chat-form-modern button {
+    padding: 0.7em 1.5em;
+    border-radius: 8px;
+    font-size: 1em;
+}
+.no-messages {
+    color: #888;
+    text-align: center;
+    margin-top: 2em;
+}
+@media (max-width: 700px) {
+    .chat-card { max-width: 98vw; padding: 1em 0.5em; }
+    .chat-box-modern { max-height: 40vh; }
+}
 </style>
+{% endblock %}
+
 <script>
 const userId = {{ user.id }};
 const otherUserId = {{ other_user.id }};
 const chatBox = document.getElementById('chat-box');
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-message-input');
+
+// WebSocket URL
 const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
 const chatSocket = new WebSocket(
     wsScheme + '://' + window.location.host + '/ws/chat/' + otherUserId + '/'
 );
 
+// Scroll to bottom on load
+window.onload = function() {
+    chatBox.scrollTop = chatBox.scrollHeight;
+};
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
+    const isSender = data.sender_id === userId;
+    // Try to use the correct avatar for sender/receiver
+    let avatarUrl = "{% static 'img/default_avatar.png' %}";
+    if (isSender) {
+        {% if user.is_company and user.companyprofile.photo %}
+        avatarUrl = "{{ user.companyprofile.photo.url }}";
+        {% elif user.is_intern and user.internprofile.photo %}
+        avatarUrl = "{{ user.internprofile.photo.url }}";
+        {% endif %}
+    } else {
+        {% if other_user.is_company and other_user.companyprofile.photo %}
+        avatarUrl = "{{ other_user.companyprofile.photo.url }}";
+        {% elif other_user.is_intern and other_user.internprofile.photo %}
+        avatarUrl = "{{ other_user.internprofile.photo.url }}";
+        {% endif %}
+    }
     const msgDiv = document.createElement('div');
-    msgDiv.className = 'chat-message ' + (data.sender_id === userId ? 'sent' : 'received');
-    msgDiv.innerHTML = `<span class="sender">${data.sender_username}</span>: <span class="content">${data.message}</span>`;
+    msgDiv.className = 'chat-bubble ' + (isSender ? 'sent' : 'received');
+    msgDiv.innerHTML = `
+        <div class="chat-bubble-avatar">
+            <img src="${avatarUrl}" alt="Profile Photo" class="avatar">
+        </div>
+        <div class="chat-bubble-content">
+            <span class="sender">${data.sender_username}</span>
+            <span class="content">${data.message}</span>
+            <span class="timestamp">now</span>
+        </div>
+    `;
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 };
 
-chatForm.onsubmit = function(e) {
+chatForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const message = chatInput.value.trim();
-    if (message) {
-        chatSocket.send(JSON.stringify({ 'message': message }));
-        chatInput.value = '';
-    }
-};
-
-// Scroll to bottom on load
-chatBox.scrollTop = chatBox.scrollHeight;
+    if (!message) return;
+    chatSocket.send(JSON.stringify({
+        'message': message
+    }));
+    chatInput.value = '';
+});
 </script>
-{% endblock %}
+}

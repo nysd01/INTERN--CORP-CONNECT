@@ -4,14 +4,16 @@ from .forms import RegisterForm, LoginForm, CompanyProfileForm, InternProfileFor
 from .models import User, CompanyProfile, InternProfile
 from django import forms
 @login_required
-def edit_profile(request):
+def profile_page(request):
 	user = request.user
 	if user.is_company:
 		profile = CompanyProfile.objects.get(user=user)
 		ProfileForm = CompanyProfileForm
+		profile_type = 'company'
 	else:
 		profile = InternProfile.objects.get(user=user)
 		ProfileForm = InternProfileForm
+		profile_type = 'intern'
 	class UserForm(forms.ModelForm):
 		class Meta:
 			model = User
@@ -23,11 +25,17 @@ def edit_profile(request):
 			user_form.save()
 			profile_form.save()
 			messages.success(request, 'Profile updated successfully!')
-			return redirect('edit_profile')
+			return redirect('profile_page')
 	else:
 		user_form = UserForm(instance=user)
 		profile_form = ProfileForm(instance=profile)
-	return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+	return render(request, 'profile_page.html', {
+		'user_form': user_form,
+		'profile_form': profile_form,
+		'profile': profile,
+		'profile_type': profile_type,
+		'user': user,
+	})
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required

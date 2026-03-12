@@ -1,8 +1,14 @@
+
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <div class="dashboard-container">
 	<h2>Welcome, {{ user.username }} <span class="role-badge">Company</span></h2>
+	<ul class="dashboard-tabs">
+		<li><a href="/overview/" class="dashboard-tab{% if request.path == '/overview/' %} active{% endif %}">Overview</a></li>
+		<li><a href="/about/" class="dashboard-tab{% if request.path == '/about/' %} active{% endif %}">About</a></li>
+		<li><a href="/company/dashboard/" class="dashboard-tab{% if request.path == '/company/dashboard/' %} active{% endif %}">Dashboard</a></li>
+	</ul>
 	<div class="dashboard-cards">
 		<a href="/company/post/" class="dashboard-card">
 			<span class="icon">&#128221;</span>
@@ -16,12 +22,114 @@
 			<span class="icon">&#128196;</span>
 			<div>View Applications</div>
 		</a>
+		<a href="/company/applications/" class="dashboard-card">
+			<span class="icon">&#128196;</span>
+			<div>View All Applicants & Documents</div>
+		</a>
 		<a href="/messaging/" class="dashboard-card">
 			<span class="icon">&#128172;</span>
 			<div>Inbox</div>
 		</a>
 	</div>
+	<!-- Recent Applicants Section -->
+	<div class="dashboard-applicants-section">
+		<h3 style="margin-top:2em; text-align:center;">Recent Applicants & Uploaded Documents</h3>
+		<table class="applicants-table">
+			<thead>
+				<tr>
+					<th>Internship</th>
+					<th>Applicant</th>
+					<th>Status</th>
+					<th>Date Applied</th>
+					<th>Documents</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for app in recent_applications %}
+				<tr>
+					<td>{{ app.internship.title }}</td>
+					<td>
+						{{ app.applicant.get_full_name|default:app.applicant.username }}
+						<a href="/messaging/chat/{{ app.applicant.id }}/" class="btn-primary" style="margin-left:0.5em; font-size:0.9em; padding:0.3em 1em;">Chat</a>
+					</td>
+					<td>{{ app.status }}</td>
+					<td>{{ app.date_applied|date:'M d, Y H:i' }}</td>
+					<td>
+						{% if app.documents.all %}
+							<ul style="margin:0; padding-left:1em;">
+							{% for doc in app.documents.all %}
+								<li>
+									<a href="{{ doc.file.url }}" target="_blank" download>{{ doc.doc_type|default:'Document' }}</a>
+									<span style="color:#888; font-size:0.9em;">({{ doc.uploaded_at|date:'M d, Y H:i' }})</span>
+								</li>
+							{% endfor %}
+							</ul>
+						{% else %}
+							No documents
+						{% endif %}
+					</td>
+				</tr>
+			{% empty %}
+				<tr><td colspan="5">No recent applicants found.</td></tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
+<style>
+.dashboard-applicants-section {
+	margin-top: 2em;
+	background: #f9f9f9;
+	border-radius: 10px;
+	padding: 2em 1.5em;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.applicants-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1em;
+	background: #fff;
+	border-radius: 8px;
+	overflow: hidden;
+	font-size: 1em;
+}
+.applicants-table th, .applicants-table td {
+	padding: 0.8em 1em;
+	border-bottom: 1px solid #eee;
+	text-align: left;
+}
+.applicants-table th {
+	background: #f4f8ff;
+	color: #007bff;
+	font-weight: 600;
+}
+.applicants-table tr:last-child td {
+	border-bottom: none;
+}
+</style>
+<style>
+.dashboard-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-bottom: 2em;
+    list-style: none;
+    padding: 0;
+}
+.dashboard-tab {
+    padding: 0.7em 2em;
+    border-radius: 6px 6px 0 0;
+    background: #f4f8ff;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+.dashboard-tab.active, .dashboard-tab:hover {
+    background: #007bff;
+    color: #fff;
+}
+</style>
 <style>
 .dashboard-container {
 	max-width: 700px;

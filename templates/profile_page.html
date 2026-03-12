@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container-unified">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {% if profile.photo %}
+                <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-pic-main">
+            {% else %}
+                <img src="{% static 'img/default_avatar.png' %}" alt="Default Avatar" class="profile-pic-main">
+            {% endif %}
+        </div>
+        <div class="profile-header-info">
+            <h2>{{ user.username }}</h2>
+            <p class="profile-email">{{ user.email }}</p>
+            {% if profile_type == 'company' %}
+                <span class="badge bg-primary">Company</span>
+            {% else %}
+                <span class="badge bg-success">Intern</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="profile-main-content">
+        <div class="profile-view-section">
+            <h3>Profile Details</h3>
+            <ul class="profile-details-list">
+                <li><strong>Username:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                {% if profile_type == 'company' %}
+                    <li><strong>Company Name:</strong> {{ profile.name }}</li>
+                    <li><strong>Address:</strong> {{ profile.address }}</li>
+                    <li><strong>Website:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></li>
+                    <li><strong>Description:</strong> {{ profile.description }}</li>
+                {% else %}
+                    <li><strong>Domain:</strong> {{ profile.domain }}</li>
+                    <li><strong>Address:</strong> {{ profile.address }}</li>
+                    <li><strong>Resume:</strong> {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank">Download</a>{% else %}N/A{% endif %}</li>
+                    <li><strong>Bio:</strong> {{ profile.bio }}</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="profile-edit-section">
+            <h3>Edit Profile</h3>
+            <form method="post" enctype="multipart/form-data" class="profile-edit-form">
+                {% csrf_token %}
+                <div class="profile-edit-fields">
+                    <div class="profile-edit-user">
+                        {{ user_form.as_p }}
+                    </div>
+                    <div class="profile-edit-profile">
+                        {{ profile_form.as_p }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+.profile-container-unified {
+    max-width: 900px;
+    margin: 2em auto;
+    background: #fff;
+    padding: 2.5em 3em;
+    border-radius: 12px;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    margin-bottom: 2em;
+}
+.profile-avatar {
+    flex-shrink: 0;
+}
+.profile-pic-main {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #eee;
+    background: #f4f4f4;
+}
+.profile-header-info h2 {
+    margin-bottom: 0.2em;
+}
+.profile-header-info .profile-email {
+    color: #666;
+    margin-bottom: 0.5em;
+}
+.profile-main-content {
+    display: flex;
+    gap: 3em;
+    flex-wrap: wrap;
+}
+.profile-view-section, .profile-edit-section {
+    flex: 1 1 320px;
+    min-width: 280px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 2em 1.5em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.profile-view-section {
+    margin-bottom: 2em;
+}
+.profile-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.profile-details-list li {
+    margin-bottom: 1em;
+    font-size: 1.08em;
+    color: #222;
+}
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+.profile-edit-fields {
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+.profile-edit-user, .profile-edit-profile {
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.8em 2em;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 auto;
+}
+.btn-primary:hover {
+    background: #0056b3;
+}
+</style>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

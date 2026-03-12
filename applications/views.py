@@ -58,13 +58,16 @@ def apply(request, internship_id):
             )
             application.save()
             # Save each uploaded file (last one is stored in model for now)
+            from .models import ApplicationDocument
             for doc in required_docs:
                 field_name = f'doc_{doc.lower().replace(" ", "_")}'
                 f = request.FILES.get(field_name)
                 if f:
-                    filename = default_storage.save(os.path.join('application_docs', f.name), f)
-                    application.uploaded_document = filename
-                    application.save()
+                    app_doc = ApplicationDocument.objects.create(
+                        application=application,
+                        file=f,
+                        doc_type=doc
+                    )
             Message.objects.create(
                 sender=request.user,
                 recipient=internship.company,
@@ -73,12 +76,12 @@ def apply(request, internship_id):
             Notification.objects.create(
                 user=internship.company,
                 message=f"New application received for {internship.title} from {request.user.username}",
-                link=f"/applications/status/"
+                link=f"/company/applications/?app_id={application.id}"
             )
             Notification.objects.create(
                 user=request.user,
                 message=f"Application for {internship.title} submitted successfully!",
-                link=f"/applications/status/"
+                link=f"/applications/status/?app_id={application.id}"
             )
             return redirect('application_status')
     else:

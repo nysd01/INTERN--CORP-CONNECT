@@ -7,6 +7,7 @@
 		<thead>
 			<tr>
 				<th>Internship</th>
+				<th>Applicant</th>
 				<th>Status</th>
 				<th>Date Applied</th>
 			</tr>
@@ -15,6 +16,7 @@
 			{% for application in applications %}
 			<tr>
 				<td><a href="/internships/{{ application.internship.id }}/">{{ application.internship.title }}</a></td>
+				<td>{{ application.applicant.get_full_name|default:application.applicant.username }}</td>
 				<td>
 					{% if request.user.is_company %}
 					<form method="post" action="/applications/update_status/{{ application.id }}/" style="display:inline;">

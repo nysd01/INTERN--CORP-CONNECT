@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="about-container">
+  <h1>About Intern Corp Connect</h1>
+  <p class="about-lead">Intern Corp Connect is dedicated to transforming the internship experience for both students and companies. Our platform is built on the principles of accessibility, transparency, and innovation, ensuring that every user finds value and opportunity.</p>
+  <section class="about-section">
+    <h2>Who We Are</h2>
+    <p>We are a passionate team of educators, technologists, and industry professionals who understand the challenges faced by students seeking internships and companies searching for the right talent. Our diverse backgrounds allow us to create solutions that are practical, user-friendly, and impactful.</p>
+  </section>
+  <section class="about-section">
+    <h2>What We Offer</h2>
+    <ul class="about-list">
+      <li><strong>For Interns:</strong> Access to a wide range of internship opportunities, personalized recommendations, and tools to build a standout profile.</li>
+      <li><strong>For Companies:</strong> Streamlined posting, candidate management, and analytics to help you find the perfect intern for your organization.</li>
+      <li><strong>For Educators:</strong> Insights and reporting to help track student progress and outcomes.</li>
+    </ul>
+  </section>
+  <section class="about-section">
+    <h2>Why Choose Us?</h2>
+    <ul class="about-list">
+      <li><strong>Comprehensive Platform:</strong> All the tools you need in one place, from search to application to communication.</li>
+      <li><strong>Modern Design:</strong> A clean, intuitive interface that makes navigation effortless for all users.</li>
+      <li><strong>Supportive Community:</strong> We foster a culture of support, learning, and growth for everyone involved.</li>
+      <li><strong>Continuous Improvement:</strong> We listen to feedback and constantly enhance our features to better serve you.</li>
+    </ul>
+  </section>
+  <section class="about-section">
+    <h2>Contact & Support</h2>
+    <p>If you have questions, suggestions, or need assistance, our support team is here to help. Reach out to us anytime and we’ll ensure you have the best experience possible.</p>
+  </section>
+</div>
+{% endblock %}
+
+<style>
+.about-container {
+  max-width: 900px;
+  margin: 2em auto;
+  background: #fff;
+  padding: 2.5em 3em;
+  border-radius: 12px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.about-container h1 {
+  text-align: center;
+  color: #28a745;
+  margin-bottom: 1.2em;
+  font-size: 2.5em;
+}
+.about-container .about-lead {
+  font-size: 1.25em;
+  color: #333;
+  margin-bottom: 2em;
+  text-align: center;
+}
+.about-section {
+  margin-bottom: 2.5em;
+}
+.about-section h2 {
+  color: #218838;
+  margin-bottom: 0.8em;
+}
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5em 0;
+}
+.about-list li {
+  background: #eafaf1;
+  border-left: 4px solid #28a745;
+  margin-bottom: 1em;
+  padding: 1em 1.2em;
+  border-radius: 6px;
+  font-size: 1.08em;
+  color: #222;
+}
+.about-section p {
+  font-size: 1.1em;
+  color: #444;
+  background: #f9f9f9;
+  padding: 1.2em;
+  border-radius: 6px;
+  border-left: 4px solid #218838;
+}
+</style>

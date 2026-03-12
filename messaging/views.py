@@ -1,3 +1,30 @@
+
+# Chat view for messaging
+from django.contrib.auth import get_user_model
+from .models import Message
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def chat(request, user_id):
+	User = get_user_model()
+	other_user = User.objects.get(id=user_id)
+	# Only allow chat if there is an application relationship
+	from applications.models import Application
+	if request.user.is_company:
+		allowed = Application.objects.filter(internship__company=request.user, applicant=other_user).exists()
+	else:
+		allowed = Application.objects.filter(applicant=request.user, internship__company=other_user).exists()
+	if not allowed:
+		return redirect('inbox')
+	messages = Message.objects.filter(
+		(models.Q(sender=request.user, recipient=other_user) |
+		 models.Q(sender=other_user, recipient=request.user))
+	).order_by('timestamp')
+	return render(request, 'chat.html', {
+		'messages': messages,
+		'user': request.user,
+		'other_user': other_user,
+	})
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -21,32 +48,6 @@ def inbox(request):
 		users = User.objects.filter(id__in=company_ids)
 	return render(request, 'inbox.html', {'users': users})
 
-@login_required
-def chat(request, user_id):
-	other_user = get_object_or_404(User, id=user_id)
-	messages = Message.objects.filter(
-		(models.Q(sender=request.user) & models.Q(recipient=other_user)) |
-		(models.Q(sender=other_user) & models.Q(recipient=request.user))
-	).order_by('timestamp')
-	# Mark messages as read
-	Message.objects.filter(sender=other_user, recipient=request.user, is_read=False).update(is_read=True)
-	if request.method == 'POST':
-		form = MessageForm(request.POST)
-		if form.is_valid():
-			msg = form.save(commit=False)
-			msg.sender = request.user
-			msg.recipient = other_user
-			msg.save()
-			# Create notification for recipient
-			Notification.objects.create(user=other_user, message=f'New message from {request.user.username}', link=f'/messaging/chat/{request.user.id}/')
-			return redirect('chat', user_id=other_user.id)
-	else:
-		form = MessageForm()
-	return render(request, 'chat.html', {'other_user': other_user, 'messages': messages, 'form': form})
-
-@login_required
-def send_message(request):
-	return render(request, 'send_message.html')
 
 @login_required
 def notifications(request):

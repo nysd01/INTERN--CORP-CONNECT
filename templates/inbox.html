@@ -11,13 +11,13 @@
 					{% if contact.companyprofile.photo %}
 						<img src="{{ contact.companyprofile.photo.url }}" alt="Profile Photo" class="avatar">
 					{% else %}
-						<img src="/static/img/default-avatar.png" alt="Profile Photo" class="avatar">
+						<img src="{% static 'img/default-avatar.png' %}" alt="Profile Photo" class="avatar">
 					{% endif %}
 				{% elif contact.is_intern %}
 					{% if contact.internprofile.photo %}
 						<img src="{{ contact.internprofile.photo.url }}" alt="Profile Photo" class="avatar">
 					{% else %}
-						<img src="/static/img/default-avatar.png" alt="Profile Photo" class="avatar">
+						<img src="{% static 'img/default-avatar.png' %}" alt="Profile Photo" class="avatar">
 					{% endif %}
 				{% endif %}
 				<span class="contact-username">{{ contact.username }}</span>

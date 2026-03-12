@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="info-container">
+  <h1>Platform Overview</h1>
+  <p class="lead">Welcome to Intern Corp Connect, your all-in-one platform for connecting talented interns with forward-thinking companies. Our platform is designed to streamline the internship process, making it easier for students to find valuable opportunities and for companies to discover the best talent.</p>
+  <section class="feature-section">
+    <h2>Key Features</h2>
+    <ul class="feature-list">
+      <li><strong>Personalized Profiles:</strong> Interns and companies can create detailed profiles, showcasing skills, experience, and company culture.</li>
+      <li><strong>Advanced Search:</strong> Filter internships and candidates by skills, location, industry, and more.</li>
+      <li><strong>Application Tracking:</strong> Manage applications, track statuses, and receive notifications in real time.</li>
+      <li><strong>Direct Messaging:</strong> Secure, built-in chat for seamless communication between interns and employers.</li>
+      <li><strong>Document Management:</strong> Upload resumes, cover letters, and company documents securely.</li>
+      <li><strong>Company Dashboards:</strong> Analytics and insights to help companies manage postings and review applicants efficiently.</li>
+      <li><strong>Intern Dashboards:</strong> Track applications, receive feedback, and manage your internship journey.</li>
+      <li><strong>Notifications:</strong> Stay updated with instant alerts for new opportunities, messages, and application updates.</li>
+      <li><strong>Security & Privacy:</strong> Your data is protected with industry-standard security protocols.</li>
+    </ul>
+  </section>
+  <section class="mission-section">
+    <h2>Our Mission</h2>
+    <p>We believe in empowering the next generation of professionals by bridging the gap between education and industry. Our mission is to provide a transparent, efficient, and supportive environment where interns and companies can thrive together.</p>
+  </section>
+  <section class="vision-section">
+    <h2>Our Vision</h2>
+    <p>To become the leading platform for internship recruitment, fostering meaningful connections and career growth for students and organizations worldwide.</p>
+  </section>
+</div>
+{% endblock %}
+
+<style>
+.info-container {
+  max-width: 900px;
+  margin: 2em auto;
+  background: #fff;
+  padding: 2.5em 3em;
+  border-radius: 12px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.info-container h1 {
+  text-align: center;
+  color: #007bff;
+  margin-bottom: 1.2em;
+  font-size: 2.5em;
+}
+.info-container .lead {
+  font-size: 1.25em;
+  color: #333;
+  margin-bottom: 2em;
+  text-align: center;
+}
+.feature-section, .mission-section, .vision-section {
+  margin-bottom: 2.5em;
+}
+.feature-section h2, .mission-section h2, .vision-section h2 {
+  color: #0056b3;
+  margin-bottom: 0.8em;
+}
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5em 0;
+}
+.feature-list li {
+  background: #f4f8ff;
+  border-left: 4px solid #007bff;
+  margin-bottom: 1em;
+  padding: 1em 1.2em;
+  border-radius: 6px;
+  font-size: 1.08em;
+  color: #222;
+}
+.mission-section p, .vision-section p {
+  font-size: 1.1em;
+  color: #444;
+  background: #f9f9f9;
+  padding: 1.2em;
+  border-radius: 6px;
+  border-left: 4px solid #0056b3;
+}
+</style>

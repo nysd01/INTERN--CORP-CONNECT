@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Documents for Application</h2>
+    <div style="margin-bottom:1.5em;">
+        <div style="margin-bottom:1.5em; display: flex; align-items: flex-start; gap: 2em;">
+            <div>
+                <strong>Internship:</strong> {{ application.internship.title }}<br>
+                <strong>Applicant:</strong> {{ application.applicant.get_full_name|default:application.applicant.username }}<br>
+                <strong>Status:</strong> {{ application.status }}<br>
+                <strong>Date Applied:</strong> {{ application.date_applied|date:'M d, Y H:i' }}
+            </div>
+            {% if application.applicant.is_intern and application.applicant.internprofile %}
+            <div style="display: flex; align-items: center; gap: 1em;">
+                {% if application.applicant.internprofile.photo %}
+                    <img src="{{ application.applicant.internprofile.photo.url }}" alt="Profile Photo" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #eee;">
+                {% else %}
+                    <img src="{% static 'img/default_avatar.png' %}" alt="Profile Photo" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #eee;">
+                {% endif %}
+                <div>
+                    <div style="font-weight:600;">{{ application.applicant.get_full_name|default:application.applicant.username }}</div>
+                    <div style="font-size:0.97em;color:#555;max-width:220px;">{{ application.applicant.internprofile.bio|default:'No description provided.' }}</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    <table class="applicants-table">
+        <thead>
+            <tr>
+                <th>Document Type</th>
+                <th>File</th>
+                <th>Uploaded At</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doc in documents %}
+            <tr>
+                <td>{{ doc.doc_type|default:'Document' }}</td>
+                <td><a href="{{ doc.file.url }}" target="_blank" download>Download</a></td>
+                <td>{{ doc.uploaded_at|date:'M d, Y H:i' }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No documents uploaded for this application.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div style="margin-top:2em;">
+        <a href="/company/applications/" class="btn-primary">Back to Applications</a>
+    </div>
+</div>
+<style>
+.applicants-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 1em;
+}
+.applicants-table th, .applicants-table td {
+    padding: 0.8em 1em;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.applicants-table th {
+    background: #f4f8ff;
+    color: #007bff;
+    font-weight: 600;
+}
+.applicants-table tr:last-child td {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

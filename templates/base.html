@@ -7,35 +7,76 @@
     <title>Intern Corp Connect</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body class="light-mode" id="main-body">
-    <header>
-        <h1>Intern Corp Connect</h1>
-        <nav>
-            {% if not request.user.is_authenticated %}
-                <a href="/accounts/login/">Login</a> |
-                <a href="/accounts/register/">Register</a>
-            {% else %}
-                <a href="/">Home</a> |
-                <a href="/accounts/logout/">Logout</a> |
-                {% if request.user.is_company %}
-                    <a href="/company/dashboard/">Dashboard</a> |
-                    <a href="/company/post/">Post Internship</a> |
-                {% elif request.user.is_intern %}
-                    <a href="/intern/dashboard/">Dashboard</a> |
-                    <a href="/intern/search/">Search Internships</a> |
+<body class="modern-bg" id="main-body">
+    <header class="main-header">
+        <div class="nav-container">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo-img" />
+            <h1 class="site-title">Intern Corp Connect</h1>
+            <nav class="main-nav">
+                {% if not request.user.is_authenticated %}
+                    <a href="/accounts/login/" class="tab-link">Login</a>
+                    <a href="/accounts/register/" class="tab-link">Register</a>
+                {% else %}
+                    <a href="/" class="tab-link">Home</a>
+                    <a href="/accounts/logout/" class="tab-link">Logout</a>
+                    {% if request.user.is_company %}
+                        <a href="/company/dashboard/" class="tab-link">Dashboard</a>
+                        <a href="/company/post/" class="tab-link">Post Internship</a>
+                    {% elif request.user.is_intern %}
+                        <a href="/intern/dashboard/" class="tab-link">Dashboard</a>
+                        <a href="/intern/search/" class="tab-link">Search Internships</a>
+                    {% endif %}
+                    <a href="/internships/" class="tab-link">List Internships</a>
+                    <a href="/applications/status/" class="tab-link">Application Status</a>
+                    <a href="/messaging/" class="tab-link">Inbox</a>
+                    <a href="/notifications/" class="tab-link">Notifications</a>
+                    <a href="/accounts/profile/" class="tab-link">Profile</a>
                 {% endif %}
-                <a href="/internships/">List Internships</a> |
-                <a href="/applications/status/">Application Status</a> |
-                <a href="/messaging/">Inbox</a> |
-                <a href="/messaging/send/">Send Message</a> |
-                <a href="/notifications/">Notifications</a> |
-                <a href="/profiles/view/">View Profile</a> |
-                <a href="/profiles/edit/">Edit Profile</a>
-            {% endif %}
-        </nav>
-        <button id="mode-switch">Switch Mode</button>
+            </nav>
+            <button id="mode-switch">🌙</button>
+        </div>
+        <section class="hero-section">
+            <div class="hero-card">
+                <div class="hero-tabs">
+                    <span class="hero-tab active">Overview</span>
+                    <span class="hero-tab">Features</span>
+                    <span class="hero-tab">About</span>
+                </div>
+                <div class="hero-main">
+                    <div class="hero-illustration">
+                        <img src="{% static 'img/hero-illustration.png' %}" alt="Hero Illustration" />
+                    </div>
+                    <div class="hero-info">
+                        <h2>Welcome to Intern Corp Connect</h2>
+                        <p>Connecting companies and interns with a beautiful, modern platform. Explore internships, manage applications, and grow your career or business.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </header>
     <main>
+        <div class="info-cards-row">
+            <div class="info-card">
+                <img src="{% static 'img/card1.png' %}" alt="Find Internships" />
+                <h3>Find Internships</h3>
+                <p>Browse and apply to top internships tailored for you.</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'img/card2.png' %}" alt="Post Opportunities" />
+                <h3>Post Opportunities</h3>
+                <p>Companies can post and manage internship listings easily.</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'img/card3.png' %}" alt="Track Applications" />
+                <h3>Track Applications</h3>
+                <p>Stay updated on your application status and notifications.</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'img/card4.png' %}" alt="Connect & Chat" />
+                <h3>Connect & Chat</h3>
+                <p>Message and network with companies and interns securely.</p>
+            </div>
+        </div>
         <div class="page-container">
             {% block content %}{% endblock %}
         </div>
@@ -45,15 +86,93 @@
     </footer>
     <script src="{% static 'js/mode.js' %}"></script>
     <style>
-        .page-container { max-width: 600px; margin: 2em auto; background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .styled-form { display: flex; flex-direction: column; gap: 1em; }
-        .input-field { padding: 0.5em; border-radius: 4px; border: 1px solid #ccc; }
-        .btn-primary { background: #007bff; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 4px; cursor: pointer; }
-        nav a { color: #007bff; text-decoration: none; margin: 0 0.5em; }
-        nav a:hover { text-decoration: underline; }
-        header, footer { background: #222; color: #fff; }
-        header { padding: 1em 0; }
-        footer { padding: 1em 0; margin-top: 2em; }
+        body.modern-bg {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            min-height: 100vh;
+        }
+        .main-header { background: transparent; color: #fff; padding-bottom: 0; }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; padding: 1.2em 2vw 0.8em 2vw; flex-wrap: nowrap; }
+        .logo-img { height: 48px; width: 48px; border-radius: 10px; margin-right: 1vw; background: #fff; }
+        .site-title { font-size: 1.7em; font-weight: 700; margin: 0 1vw 0 0; letter-spacing: 1px; color: #fff; }
+        .main-nav { display: flex; gap: 1vw; font-size: 1em; flex-wrap: nowrap; white-space: nowrap; overflow-x: auto; }
+        .tab-link { color: #fff; text-decoration: none; font-weight: 600; font-size: 1em; padding: 0.5em 1.2vw; border-radius: 8px 8px 0 0; background: rgba(255,255,255,0.13); margin-bottom: -2px; transition: background 0.2s, color 0.2s; }
+        .tab-link:hover, .tab-link.active { background: #fff; color: #7b2ff2; }
+        #mode-switch { background: #fff; color: #7b2ff2; border: none; border-radius: 50%; width: 54px; height: 54px; font-size: 2em; cursor: pointer; margin-left: 2em; transition: background 0.2s; }
+        #mode-switch:hover { background: #e6e6e6; }
+        .hero-section { display: flex; align-items: center; justify-content: center; background: none; color: #222; padding: 2em 2vw 2em 2vw; border-radius: 0 0 18px 18px; margin-bottom: 2vw; }
+        .hero-card { background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(123,47,242,0.10); padding: 2em 2em 1.5em 2em; max-width: 900px; width: 100%; }
+        .hero-tabs { display: flex; gap: 1.2em; margin-bottom: 1.2em; font-size: 1.1em; flex-wrap: nowrap; }
+        .hero-tab { font-size: 1em; color: #7b2ff2; background: #f3e9ff; padding: 0.5em 1.5em; border-radius: 8px 8px 0 0; cursor: pointer; opacity: 0.8; transition: opacity 0.2s, background 0.2s; text-decoration: none; }
+        .hero-tab.active { background: #fff; opacity: 1; font-weight: 700; box-shadow: 0 2px 8px rgba(123,47,242,0.08); }
+        .hero-main { display: flex; align-items: center; gap: 2em; flex-wrap: wrap; }
+        .hero-illustration img { width: 180px; height: 140px; min-width: 100px; min-height: 80px; max-width: 220px; max-height: 180px; object-fit: contain; border-radius: 12px; box-shadow: 0 2px 8px rgba(123,47,242,0.10); background: #f3e9ff; }
+        .hero-info { max-width: 420px; min-width: 180px; }
+        .hero-info h2 { font-size: 1.5em; color: #7b2ff2; margin-bottom: 0.5em; }
+        .hero-info p { font-size: 1em; color: #333; }
+        .info-cards-row { display: flex; justify-content: center; gap: 2vw; margin: 2vw 0 1.2vw 0; flex-wrap: wrap; }
+        .info-card { background: #fff; border-radius: 14px; box-shadow: 0 4px 16px rgba(123,47,242,0.08); padding: 1.5em 1.5em 1.2em 1.5em; width: 200px; min-width: 140px; max-width: 260px; text-align: center; transition: box-shadow 0.2s, transform 0.2s; min-height: 140px; cursor: pointer; }
+        .info-card img { width: 56px; height: 56px; margin-bottom: 1em; border-radius: 8px; background: #f3e9ff; }
+        .info-card h3 { color: #7b2ff2; font-size: 1.1em; margin-bottom: 0.5em; }
+        .info-card p { color: #555; font-size: 0.98em; }
+        .info-card:hover { box-shadow: 0 8px 32px rgba(123,47,242,0.13); transform: translateY(-4px) scale(1.03); }
+        .page-container { max-width: 900px; margin: 2em auto; background: #fff; padding: 2em; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.10); min-width: 140px; font-size: 1em; }
+        .styled-form { display: flex; flex-direction: column; gap: 1em; font-size: 1em; }
+        .input-field { padding: 0.5em; border-radius: 4px; border: 1px solid #ccc; font-size: 1em; }
+        .btn-primary { background: #7b2ff2; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        footer { background: #222; color: #fff; padding: 1em 0; margin-top: 2em; text-align: center; font-size: 1em; }
+
+        /* Responsive adjustments */
+        @media (max-width: 1100px) {
+            .nav-container, .hero-section, .hero-card, .page-container {
+                padding-left: 1vw;
+                padding-right: 1vw;
+            }
+            .main-nav { gap: 0.5vw; font-size: 1em; }
+            .info-cards-row { gap: 1vw; }
+        }
+        @media (max-width: 800px) {
+            .nav-container, .hero-section, .hero-card, .page-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1vw 0.5vw;
+            }
+            .main-nav { flex-direction: column; gap: 0.5em; align-items: flex-start; white-space: normal; }
+            .site-title { font-size: 1.2em; }
+            .hero-main { flex-direction: column; gap: 1vw; }
+            .info-cards-row { flex-direction: column; gap: 1vw; }
+            .info-card { width: 90vw; min-width: 0; max-width: 100vw; }
+            .hero-illustration img { width: 40vw; height: 30vw; }
+        }
+        @media (max-width: 500px) {
+            .nav-container, .hero-section, .hero-card, .page-container {
+                padding: 0.5vw 0.2vw;
+            }
+            .logo-img { height: 32px; width: 32px; }
+            .site-title { font-size: 1em; }
+            .hero-info h2 { font-size: 1em; }
+            .hero-info p, .info-card p, .info-card h3, .tab-link, .btn-primary, .page-container, .main-nav { font-size: 0.95em; }
+            .info-card img { width: 32px; height: 32px; }
+        }
+    </style>
+
+    <script>
+    // Make hero tabs clickable and route
+    document.addEventListener('DOMContentLoaded', function() {
+        const heroTabs = document.querySelectorAll('.hero-tab');
+        heroTabs[0].onclick = () => window.location.href = '/overview/';
+        heroTabs[1].onclick = () => window.location.href = '/features/';
+        heroTabs[2].onclick = () => window.location.href = '/about/';
+
+        // Make info cards clickable
+        const infoCards = document.querySelectorAll('.info-card');
+        if (infoCards.length >= 4) {
+            infoCards[0].onclick = () => window.location.href = '/intern/search/';
+            infoCards[1].onclick = () => window.location.href = '/company/post/';
+            infoCards[2].onclick = () => window.location.href = '/applications/status/';
+            infoCards[3].onclick = () => window.location.href = '/messaging/';
+        }
+    });
+    </script>
     </style>
 </body>
 </html>

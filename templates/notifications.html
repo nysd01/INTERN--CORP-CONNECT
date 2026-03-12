@@ -6,7 +6,13 @@
 	<ul class="notifications-list">
 		{% for notification in notifications %}
 		<li class="notification {% if not notification.read %}unread{% endif %}">
-			<span>{{ notification.message }}</span>
+			{% if notification.link %}
+				<a href="{{ notification.link }}" style="text-decoration:none;color:inherit;">
+					<span>{{ notification.message }}</span>
+				</a>
+			{% else %}
+				<span>{{ notification.message }}</span>
+			{% endif %}
 			<span class="timestamp">{{ notification.timestamp|date:'M d, Y H:i' }}</span>
 		</li>
 		{% empty %}

@@ -6,7 +6,7 @@
 		{% if profile.photo %}
 			<img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-avatar" />
 		{% else %}
-			<img src="/static/img/default-avatar.png" alt="Profile Photo" class="profile-avatar" />
+			<img src="{% static 'img/default-avatar.png' %}" alt="Profile Photo" class="profile-avatar" />
 		{% endif %}
 		<h2>{{ profile.user.username }}'s Profile</h2>
 		<p class="profile-type">{% if profile.user.is_company %}Company{% else %}Intern{% endif %}</p>

@@ -3,6 +3,11 @@
 {% block content %}
 <div class="dashboard-container">
     <h2>Welcome, {{ user.username }} <span class="role-badge">Intern</span></h2>
+    <ul class="dashboard-tabs">
+        <li><a href="/overview/" class="dashboard-tab{% if request.path == '/overview/' %} active{% endif %}">Overview</a></li>
+        <li><a href="/about/" class="dashboard-tab{% if request.path == '/about/' %} active{% endif %}">About</a></li>
+        <li><a href="/intern/dashboard/" class="dashboard-tab{% if request.path == '/intern/dashboard/' %} active{% endif %}">Dashboard</a></li>
+    </ul>
     <div class="dashboard-cards">
         <a href="/intern/search/" class="dashboard-card">
             <span class="icon">&#128269;</span>
@@ -22,6 +27,29 @@
         </a>
     </div>
 </div>
+<style>
+.dashboard-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-bottom: 2em;
+    list-style: none;
+    padding: 0;
+}
+.dashboard-tab {
+    padding: 0.7em 2em;
+    border-radius: 6px 6px 0 0;
+    background: #f4f8ff;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+.dashboard-tab.active, .dashboard-tab:hover {
+    background: #007bff;
+    color: #fff;
+}
+</style>
 <style>
 .dashboard-container {
     max-width: 700px;
