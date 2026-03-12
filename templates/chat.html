@@ -23,7 +23,13 @@
                     </div> 
                     <div class="chat-bubble-content"> 
                         <span class="sender">{{ message.sender.username }}</span> 
-                        <span class="content">{{ message.content }}</span> 
+                        <span class="content">
+                            {% if 'attach' in message.content|lower %}
+                                <a href="/company/applications/?applicant={{ other_user.id }}" target="_blank">Attach</a>
+                            {% else %}
+                                {{ message.content }}
+                            {% endif %}
+                        </span> 
                         <span class="timestamp">{{ message.timestamp|date:'M d, Y H:i' }}</span> 
                     </div> 
                 </div>
@@ -191,6 +197,9 @@ chatSocket.onmessage = function(e) {
         avatarUrl = "{{ other_user.internprofile.photo.url }}";
         {% endif %}
     }
+    const msgContent = data.message.toLowerCase().includes('attach')
+        ? `<a href="/company/applications/?applicant=${otherUserId}" target="_blank">Attach</a>`
+        : data.message;
     const msgDiv = document.createElement('div');
     msgDiv.className = 'chat-bubble ' + (isSender ? 'sent' : 'received');
     msgDiv.innerHTML = `
@@ -199,8 +208,8 @@ chatSocket.onmessage = function(e) {
         </div>
         <div class="chat-bubble-content">
             <span class="sender">${data.sender_username}</span>
-            <span class="content">${data.message}</span>
-            <span class="timestamp">now</span>
+            <span class="content">${msgContent}</span>
+            <span class="timestamp">${new Date().toLocaleString()}</span>
         </div>
     `;
     chatBox.appendChild(msgDiv);
